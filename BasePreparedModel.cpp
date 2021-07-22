@@ -190,7 +190,7 @@ void asyncExecute(const Request& request, MeasureTiming measure, BasePreparedMod
     }
     if (measure == MeasureTiming::YES) deviceEnd = now();
 
-    for (size_t i = 0; i < request.outputs.size(); i++) {
+    for (size_t i = 1; i < request.outputs.size(); i++) { // Ugly Hack
         auto outIndex = modelInfo->getModelOutputIndex(i);
         ALOGI("OutputIndex: %d", outIndex);
         const std::string& outputNodeName = ngraphNw->getNodeName(outIndex);
@@ -278,7 +278,7 @@ static std::tuple<ErrorStatus, hidl_vec<V1_2::OutputShape>, Timing> executeSynch
         return {ErrorStatus::GENERAL_FAILURE, {}, kNoTiming};
     }
 
-    for (size_t i = 0; i < request.inputs.size(); i++) {
+    for (size_t i = 0; i < 1; i++) {
         auto inIndex = modelInfo->getModelInputIndex(i);
         auto srcBlob = modelInfo->getBlobFromMemoryPoolIn(request, i);
 
@@ -289,9 +289,9 @@ static std::tuple<ErrorStatus, hidl_vec<V1_2::OutputShape>, Timing> executeSynch
         }
         ALOGD("Input index: %d layername : %s", inIndex, inputNodeName.c_str());
         auto destBlob = plugin->getBlob(inputNodeName);
-        uint8_t* dest = destBlob->buffer().as<uint8_t*>();
-        uint8_t* src = srcBlob->buffer().as<uint8_t*>();
-        std::memcpy(dest, src, srcBlob->byteSize());
+        //uint8_t* dest = destBlob->buffer().as<uint8_t*>();
+        //uint8_t* src = srcBlob->buffer().as<uint8_t*>();
+        //std::memcpy(dest, src, srcBlob->byteSize());
     }
 
     ALOGD("%s Run", __func__);
@@ -305,7 +305,7 @@ static std::tuple<ErrorStatus, hidl_vec<V1_2::OutputShape>, Timing> executeSynch
     }
     if (measure == MeasureTiming::YES) deviceEnd = now();
 
-    for (size_t i = 0; i < request.outputs.size(); i++) {
+    for (size_t i = 1; i < request.outputs.size(); i++) { // Ugly Hack
         auto outIndex = modelInfo->getModelOutputIndex(i);
         ALOGI("OutputIndex: %d", outIndex);
         const std::string& outputNodeName = ngraphNw->getNodeName(outIndex);

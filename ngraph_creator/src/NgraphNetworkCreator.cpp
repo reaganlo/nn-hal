@@ -62,9 +62,10 @@ bool NgraphNetworkCreator::createInputParams() {
                               nnapiOperand.type);
                         break;
                     case OperandType::TENSOR_QUANT8_ASYMM:
+                    case OperandType::TENSOR_QUANT8_ASYMM_SIGNED:
                         inputParam = std::make_shared<ngraph::opset3::Parameter>(
-                            ngraph::element::u8, ngraph::Shape(dims.begin(), dims.end()));
-                        ALOGV("createInputParams created inputIndex %d, type %d", i,
+                            ngraph::element::f32, ngraph::Shape(dims.begin(), dims.end()));
+                        ALOGE("createInputParams FP32 created inputIndex %d, type %d", i,
                               nnapiOperand.type);
                         break;
                     case OperandType::TENSOR_QUANT8_SYMM:
@@ -72,6 +73,12 @@ bool NgraphNetworkCreator::createInputParams() {
                             ngraph::element::i8, ngraph::Shape(dims.begin(), dims.end()));
                         ALOGV("createInputParams created inputIndex %d, type %d", i,
                               nnapiOperand.type);
+                        break;
+                    case OperandType::TENSOR_QUANT16_SYMM:
+                        inputParam = std::make_shared<ngraph::opset3::Parameter>(
+                            ngraph::element::f32, ngraph::Shape(dims.begin(), dims.end()));
+                        ALOGE("createInputParams created inputIndex %d, type %d", i,
+                            nnapiOperand.type);
                         break;
                     default:
                         ALOGE("createInputParams Failure at inputIndex %d, type %d", i,
