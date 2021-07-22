@@ -37,6 +37,7 @@
 #include <Pad_V2.hpp>
 #include <Pow.hpp>
 #include <Quantize.hpp>
+#include <QuantizedLSTM.hpp>
 #include <RSQRT.hpp>
 #include <Reduce_All.hpp>
 #include <Reduce_Any.hpp>

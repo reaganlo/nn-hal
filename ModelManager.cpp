@@ -63,9 +63,16 @@ bool NnapiModelInfo::initializeRunTimeOperandInfo() {
             case OperandType::TENSOR_BOOL8:
                 to.type = from.type;
                 break;
-            case OperandType::TENSOR_QUANT8_ASYMM:
             case OperandType::TENSOR_QUANT8_SYMM:
+            case OperandType::TENSOR_QUANT16_SYMM:
                 to.type = from.type;
+                to.scale = from.scale;
+                break;
+            case OperandType::TENSOR_QUANT8_ASYMM_SIGNED:
+            case OperandType::TENSOR_QUANT8_ASYMM:
+                to.type = from.type;
+                to.scale = from.scale;
+                to.zeroPoint = from.zeroPoint;
                 break;
             default:
                 ALOGE("wrong operand type %d", from.type);

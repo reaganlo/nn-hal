@@ -89,8 +89,8 @@ std::shared_ptr<OperationsBase> OperationsFactory::getOperation(
             return std::make_shared<Pad_V2>(operationIndex);
         case OperationType::POW:
             return std::make_shared<Pow>(operationIndex);
-        case OperationType::QUANTIZE:
-            return std::make_shared<Quantize>(operationIndex);
+        case OperationType::QUANTIZED_LSTM:
+            return std::make_shared<QuantizedLSTM>(operationIndex);
         case OperationType::REDUCE_ALL:
             return std::make_shared<Reduce_All>(operationIndex);
         case OperationType::REDUCE_ANY:

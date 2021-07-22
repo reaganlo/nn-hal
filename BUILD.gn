@@ -111,6 +111,7 @@ shared_library("intel_nnhal") {
     "ngraph_creator/operations/src/Pad.cpp",
     "ngraph_creator/operations/src/Pow.cpp",
     "ngraph_creator/operations/src/Quantize.cpp",
+    "ngraph_creator/operations/src/QuantizedLSTM.cpp",
     "ngraph_creator/operations/src/Reduce_All.cpp",
     "ngraph_creator/operations/src/Reduce_Any.cpp",
     "ngraph_creator/operations/src/Reduce_Min.cpp",
@@ -176,11 +177,11 @@ shared_library("intel_nnhal") {
     "rt",
     "nnapi-support",
     "ngraph",
-    #"inference_engine_legacy", 
+    #"inference_engine_legacy",
     #"inference_engine_c_api",
     #"inference_engine_preproc",
     "inference_engine",
-    "nn-common", 
+    "nn-common",
     "ssl",
     "crypto"
   ]
