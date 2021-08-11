@@ -450,28 +450,26 @@ std::shared_ptr<ngraph::Node> QuantizedLSTM::applyActivation(const std::shared_p
 
 std::shared_ptr<ngraph::Node> QuantizedLSTM::LayerNorm(
     const ngraph::Output<ngraph::Node>& input,
-    const std::shared_ptr<ngraph::Node>& normalizationweights,
+    const std::shared_ptr<ngraph::Node>& gain,
     const std::shared_ptr<ngraph::Node>& bias) {
-    // LayerNormalization
-    auto normalizationConstant = createConstNode(ngraph::element::f32, {}, convertToVector(1e-8f));
     auto axis = ngraph::op::Constant::create(ngraph::element::i32, {}, {-1});
+
+    // mean_i
     auto mean = std::make_shared<ngraph::opset3::ReduceMean>(input, axis, true);
     // x_i - mean_i
     auto diff = sub(input, mean);
     // (x_i - mean_i) ** 2
-    auto multiply = mul(diff, diff);
+    auto sq = mul(diff, diff);
     // mean((x_i - mean_i) ** 2)
-    auto var = std::make_shared<ngraph::opset3::ReduceMean>(multiply, axis, true);
-    // var_i + epsilon
-    auto add_var = add(var, normalizationConstant);
-    // sqrt(var_i + epsilon)
-    auto sqrt = std::make_shared<ngraph::opset3::Sqrt>(add_var);
-    // (x_i - mean_i) / sqrt(var_i + epsilon)
-    auto stddev_inv = std::make_shared<ngraph::opset3::Divide>(diff, sqrt);
-    // x_i_normalized * gamma
-    auto mul_norm_weights = mul(stddev_inv, normalizationweights);
-    // x_i_normalized * gamma + beta
-    auto output = add(mul_norm_weights, bias);
+    auto var = std::make_shared<ngraph::opset3::ReduceMean>(sq, axis, true);
+    // sqrt(var_i)
+    auto sqrt = std::make_shared<ngraph::opset3::Sqrt>(var);
+    // gain / sqrt(var_i)
+    auto div = std::make_shared<ngraph::opset3::Divide>(gain, sqrt);
+    // gain / sqrt(var_i) (.) (x_i - mean_i)
+    auto hadamard = mul(div, diff);
+    // hadamard + beta
+    auto output = add(hadamard, bias);
 
     return output;
 }
