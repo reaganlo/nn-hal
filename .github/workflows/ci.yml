@@ -1,0 +1,73 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  clang-format:
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run clang-format style check.
+      uses: jidicula/clang-format-action@v4.4.1
+      with:
+        clang-format-version: '13'
+        check-path: 'nn-hal'
+  fetch-push:
+    needs: clang-format
+    if: github.event_name == 'push'
+    runs-on: self-hosted
+    env:
+      ROOT_DIR: /opt/chromeos/workspace
+      REPO_NAME: intel-nnhal-dev
+    steps:
+    - name: Fetch push code.
+      run: |
+        echo ${{ github.event_name }}
+        echo ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
+        cd ${ROOT_DIR}/src/third_party/
+        rm -rf ${REPO_NAME}
+        git clone ${{ github.server_url }}/${{ github.repository }} ${REPO_NAME}
+        cd ${REPO_NAME}
+        git checkout ${{ github.sha }}
+        cp ci/* ${ROOT_DIR}/src/
+  fetch-pr:
+    needs: clang-format
+    if: github.event_name == 'pull_request'
+    runs-on: self-hosted
+    env:
+      ROOT_DIR: /opt/chromeos/workspace
+      REPO_NAME: intel-nnhal-dev
+    steps:
+    - name: Fetch pull code.
+      run: |
+        echo ${{ github.event_name }}
+        echo ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
+        cd ${ROOT_DIR}/src/third_party/
+        rm -rf ${REPO_NAME}
+        git clone ${{ github.server_url }}/${{ github.repository }} ${REPO_NAME}
+        cd ${REPO_NAME}
+        git fetch origin pull/${{ github.event.number }}/${{ github.ref }}
+        echo pull/${{ github.event.number }}/${{ github.ref }}
+        git checkout ${{ github.ref }}
+        cp ci/* ${ROOT_DIR}/src/
+  build:
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+    needs: [fetch-push, fetch-pr]
+    runs-on: self-hosted
+    env:
+      ROOT_DIR: /opt/chromeos/workspace
+    steps:
+    - name: Build and deploy nn-hal.
+      run: |
+        cd ${ROOT_DIR}/src/
+        sh build-test.sh "build"
+  test-functional:
+    if: ${{ always() }}
+    needs: build
+    runs-on: self-hosted
+    env:
+      ROOT_DIR: /opt/chromeos/workspace
+    steps:
+    - name: Run functional tests for nn-hal.
+      run: |
+        cd ${ROOT_DIR}/src/
+        sh build-test.sh "functional"
