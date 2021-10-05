@@ -167,26 +167,25 @@ shared_library("intel_nnhal") {
     "intel_nn_hal/graphAPI",
     "intel_nn_hal/graphAPI/builderLayerNorm",
     "intel_nn_hal/dl",
-    "../intel-openvino-dev/inference-engine/src/inference_engine",
-    "../intel-openvino-dev/inference-engine/thirdparty/pugixml/src",
-    "../intel-openvino-dev/inference-engine/include",
-    "../intel-openvino-dev/inference-engine/include/cpp",
-    "../intel-openvino-dev/inference-engine/include/details",
-    "../intel-openvino-dev/inference-engine/include/details/os",
-    "../intel-openvino-dev/inference-engine/include/cldnn",
-    "../intel-openvino-dev/inference-engine/include/gna",
-    "../intel-openvino-dev/inference-engine/include/hetero",
-    "../intel-openvino-dev/inference-engine/include/mkldnn",
-    "../intel-openvino-dev/inference-engine/include/openvx",
-    "../intel-openvino-dev/inference-engine/include/vpu",
-    "../intel-openvino-dev/inference-engine/src/inference_engine",
-    "../intel-openvino-dev/inference-engine/src/dumper",
-    "../intel-openvino-dev/inference-engine/src/inference_engine/cpp_interfaces",
-    "../intel-openvino-dev/inference-engine/src/inference_engine/cpp_interfaces/base",
-    "../intel-openvino-dev/inference-engine/src/inference_engine/cpp_interfaces/impl",
-    "../intel-openvino-dev/inference-engine/src/inference_engine/cpp_interfaces/interface",
-    "../intel-openvino-dev/inference-engine/thirdparty/pugixml/src/",
-    "../intel-openvino-dev/ngraph/core/include",
+    "./openvino/inference-engine/src/inference_engine",
+    "./openvino/inference-engine/include",
+    "./openvino/inference-engine/include/cpp",
+    "./openvino/inference-engine/include/details",
+    "./openvino/inference-engine/include/details/os",
+    "./openvino/inference-engine/include/cldnn",
+    "./openvino/inference-engine/include/gna",
+    "./openvino/inference-engine/include/hetero",
+    "./openvino/inference-engine/include/mkldnn",
+    "./openvino/inference-engine/include/openvx",
+    "./openvino/inference-engine/include/vpu",
+    "./openvino/inference-engine/src/inference_engine",
+    "./openvino/inference-engine/src/dumper",
+    "./openvino/inference-engine/src/inference_engine/cpp_interfaces",
+    "./openvino/inference-engine/src/inference_engine/cpp_interfaces/base",
+    "./openvino/inference-engine/src/inference_engine/cpp_interfaces/impl",
+    "./openvino/inference-engine/src/inference_engine/cpp_interfaces/interface",
+    "./openvino/thirdparty/pugixml/src/",
+    "./openvino/ngraph/core/include",
   ]
   libs = [
     "pthread",
@@ -194,7 +193,7 @@ shared_library("intel_nnhal") {
     "nnapi-support",
     "ngraph",
     "inference_engine",
-    "nn-common", 
+    "nn-common",
     "ssl",
     "crypto"
   ]
@@ -227,9 +226,9 @@ static_library("pugixml") {
     "-DIMPLEMENT_INFERENCE_ENGINE_API",
   ]
   sources = [
-    "../intel-openvino-dev/inference-engine/thirdparty/pugixml/src/pugixml.cpp"
+    "./openvino/thirdparty/pugixml/src/pugixml.cpp"
   ]
   include_dirs = [
-   "../intel-openvino-dev/inference-engine/thirdparty/pugixml/src",
+   "./openvino/thirdparty/pugixml/src",
   ]
 }
