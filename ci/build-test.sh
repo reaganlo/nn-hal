@@ -46,6 +46,7 @@ getBoardAddr() {
 	fi
 }
 
+echo "HELLO WORLD FROM MAL!!!!!!!!!!!1"
 getBoardAddr
 
 echo ${ACTION}
