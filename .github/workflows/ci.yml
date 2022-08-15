@@ -45,9 +45,8 @@ jobs:
         rm -rf ${REPO_NAME}
         git clone ${{ github.server_url }}/${{ github.repository }} ${REPO_NAME}
         cd ${REPO_NAME}
-        git fetch origin pull/${{ github.event.number }}/${{ github.ref }}
-        echo pull/${{ github.event.number }}/${{ github.ref }}
-        git checkout ${{ github.ref }}
+        git fetch origin pull/${{ github.event.number }}/head:${{ github.head_ref }}
+        git checkout ${{ github.head_ref }}
         cp ci/* ${ROOT_DIR}/src/
   build:
     if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
