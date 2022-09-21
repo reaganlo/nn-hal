@@ -17,6 +17,7 @@
 #include "Driver.h"
 #include <string>
 
+#include <LegacyHalUtils.h>
 #include <android-base/logging.h>
 #include <thread>
 #include "BasePreparedModel.h"

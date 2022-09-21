@@ -15,6 +15,7 @@
  */
 #include "BasePreparedModel.h"
 
+#include <LegacyHalUtils.h>
 #include <android-base/logging.h>
 #include <android/log.h>
 #include <cutils/properties.h>
